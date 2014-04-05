@@ -1,13 +1,39 @@
-function creator() {
-  var textEl = viewer({text: '...'});
+function creator(opts) {
+  var text = opts.text || 'type here';
+
+  text = decodeURIComponent(text);
+  text = text.replace('\n', '<br>');
+
+  var textEl = document.createElement('div');
+  textEl.classList.add('text');
+  textEl.textContent = text;
   textEl.contentEditable = true;
-  textEl.style.border = '1px solid black';
+
   textEl.addEventListener('input', function() {
     resizeText();
     var query = getQueryObj();
     query.text = prepareText(textEl.innerHTML);
     setQueryObj(query);
   });
+
+  document.body.appendChild(textEl);
+
+  var buttonEl = document.createElement('button');
+  buttonEl.textContent = 'Save';
+
+  buttonEl.addEventListener('click', commit);
+
+  document.body.appendChild(buttonEl);
+
+  document.addEventListener('keypress', function(e) {
+    console.log(e.charCode, e.ctrlKey, e.shiftKey, e);
+    if (e.keyCode === 13 && (e.ctrlKey || e.shiftKey)) { // e
+      commit();
+    }
+  });
+
+  window.addEventListener('resize', resizeText);
+  resizeText();
 }
 
 function prepareText(text) {
@@ -16,16 +42,32 @@ function prepareText(text) {
   return text;
 }
 
+function commit() {
+  var query = getQueryObj();
+  delete query.edit;
+  setQueryObj(query);
+  window.location = window.location;
+}
+
 function viewer(opts) {
   var text = decodeURIComponent(opts.text);
   text = text.replace('\n', '<br>');
+
   var textEl = document.createElement('div');
   textEl.classList.add('text');
   textEl.innerHTML = text;
   document.body.appendChild(textEl);
   window.addEventListener('resize', resizeText);
   resizeText();
-  return textEl;
+
+  document.addEventListener('keypress', function(e) {
+    if (e.charCode === 101) { // e
+      var query = getQueryObj();
+      query.edit = true;
+      setQueryObj(query);
+      window.location = window.location;
+    }
+  });
 }
 
 function resizeText() {
@@ -51,10 +93,10 @@ function resizeText() {
 
 function main() {
   var query = getQueryObj();
-  if (query.text) {
+  if (query.text && !query.edit) {
     viewer(query);
   } else {
-    creator();
+    creator(query);
   }
 }
 
