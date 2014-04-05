@@ -1,0 +1,23 @@
+{
+  "name": "texty",
+  "version": "0.0.0",
+  "description": "Text for TVs.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mythmon/texty.git"
+  },
+  "author": "Mike Cooper <mythmon@gmail.com>",
+  "license": "MPLv2",
+  "bugs": {
+    "url": "https://github.com/mythmon/texty/issues"
+  },
+  "homepage": "https://github.com/mythmon/texty",
+  "devDependencies": {
+    "gulp": "^3.6.0",
+    "gulp-gh-pages": "^0.1.4"
+  }
+}
