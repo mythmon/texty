@@ -1,14 +1,31 @@
 function creator() {
+  var textEl = viewer({text: '...'});
+  textEl.contentEditable = true;
+  textEl.style.border = '1px solid black';
+  textEl.addEventListener('input', function() {
+    resizeText();
+    var query = getQueryObj();
+    query.text = prepareText(textEl.innerHTML);
+    setQueryObj(query);
+  });
+}
+
+function prepareText(text) {
+  text = text.replace(/&lt;(.*?)&gt;/g, '<$1>');
+  text = encodeURIComponent(text);
+  return text;
 }
 
 function viewer(opts) {
-  var text = decodeURI(opts.text);
+  var text = decodeURIComponent(opts.text);
+  text = text.replace('\n', '<br>');
   var textEl = document.createElement('div');
   textEl.classList.add('text');
   textEl.innerHTML = text;
   document.body.appendChild(textEl);
   window.addEventListener('resize', resizeText);
   resizeText();
+  return textEl;
 }
 
 function resizeText() {
@@ -35,10 +52,8 @@ function resizeText() {
 function main() {
   var query = getQueryObj();
   if (query.text) {
-    console.log('viewer');
     viewer(query);
   } else {
-    console.log('creator');
     creator();
   }
 }
@@ -57,6 +72,17 @@ function getQueryObj() {
     ret[key] = val;
   });
   return ret;
+}
+
+function setQueryObj(obj) {
+  var qs = '?';
+  for (var key in obj) {
+    if (key) {
+      qs += key + '=' + obj[key] + '&';
+    }
+  }
+  var url = window.location.origin + window.location.pathname + qs.slice(0, -1) + window.location.hash;
+  history.replaceState({}, "", url);
 }
 
 main();
