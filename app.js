@@ -20,9 +20,7 @@ function creator(opts) {
 
   var buttonEl = document.createElement('button');
   buttonEl.textContent = 'Save';
-
   buttonEl.addEventListener('click', commit);
-
   document.body.appendChild(buttonEl);
 
   document.addEventListener('keypress', function(e) {
@@ -34,6 +32,7 @@ function creator(opts) {
 
   window.addEventListener('resize', resizeText);
   resizeText();
+  setColors(opts);
 }
 
 function prepareText(text) {
@@ -59,6 +58,7 @@ function viewer(opts) {
   document.body.appendChild(textEl);
   window.addEventListener('resize', resizeText);
   resizeText();
+  setColors(opts);
 
   document.addEventListener('keypress', function(e) {
     if (e.charCode === 101) { // e
@@ -88,6 +88,13 @@ function resizeText() {
   }
 
   text.style.left = ((window.innerWidth - text.offsetWidth) / 2) + 'px';
+}
+
+function setColors(opts) {
+  var bg = decodeURIComponent(opts.bg || opts.background);
+  var fg = decodeURIComponent(opts.fg || opts.color);
+  document.body.style.backgroundColor = bg;
+  document.querySelector('.text').style.color = fg;
 }
 
 
