@@ -1,5 +1,6 @@
 var gulp = require('gulp');
 var deploy = require("gulp-gh-pages");
+require('gulp-help')(gulp);
 
 var sourceFiles = [
   'index.html',
@@ -7,7 +8,7 @@ var sourceFiles = [
   'app.css',
 ];
 
-gulp.task('deploy', function () {
+gulp.task('deploy', 'Deploy to GH Pages', function () {
     gulp.src(sourceFiles)
         .pipe(deploy('https://github.com/mythmon/texty', 'origin'));
 });
