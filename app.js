@@ -23,10 +23,10 @@ function creator(opts) {
   buttonEl.addEventListener('click', commit);
   document.body.appendChild(buttonEl);
 
-  document.addEventListener('keypress', function(e) {
-    console.log(e.charCode, e.ctrlKey, e.shiftKey, e);
+  document.addEventListener('keydown', function(e) {
     if (e.keyCode === 13 && (e.ctrlKey || e.shiftKey)) { // e
       commit();
+      e.preventDefault();
     }
   });
 
