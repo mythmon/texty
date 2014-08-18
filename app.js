@@ -25,8 +25,8 @@ function creator(opts) {
 
   document.addEventListener('keydown', function(e) {
     if (e.keyCode === 13 && (e.ctrlKey || e.shiftKey)) { // e
-      commit();
       e.preventDefault();
+      commit();
     }
   });
 
